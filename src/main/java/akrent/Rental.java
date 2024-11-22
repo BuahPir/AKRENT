@@ -1,4 +1,4 @@
-/*
+    /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
@@ -362,28 +362,17 @@ public class Rental extends javax.swing.JFrame {
 
     private void submitSewaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitSewaActionPerformed
         // TODO add your handling code here:
-        if (inputNama.getText().equals("Masukkan Nama") || inputNIK.getText().equals("Masukkan NIK") || inputHP.getText().equals("Masukkan No HP") || inputAlamat.getText().equals("Masukkan Alamat")) {
-            jLabel9.setForeground(Color.red);
-            jLabel9.setText("Error, Pastikan anda memasukkan Semua data");
-            
-            javax.swing.Timer timer = new javax.swing.Timer(5000, e -> {
-                jLabel9.setText(""); // Clear the error message
-            });
-            timer.setRepeats(false); // Ensure the timer runs only once
-            timer.start();
-            return;
-        }
         String nama = inputNama.getText();
         String nik = inputNIK.getText();
         String hp = inputHP.getText();
         String alamat = inputAlamat.getText();
-
         try {
+            Long nik1 = Long.parseLong(nik);
             Connection c = KoneksiDatabase.getKoneksi();
             String sql = "INSERT INTO penyewa (nama, nik, no_hp, alamat) VALUES (? ,?, ?, ?)";
             PreparedStatement p = c.prepareStatement(sql);
             p.setString(1, nama);   
-            p.setString(2, nik);
+            p.setLong(2, nik1);
             p.setString(3, hp);
             p.setString(4, alamat); 
             p.executeUpdate();
@@ -399,6 +388,9 @@ public class Rental extends javax.swing.JFrame {
             });
             timer.setRepeats(false); // Ensure the timer runs only once
             timer.start();
+            new RentalHal2().setVisible(true);
+            this.dispose();
+            
         }
     }//GEN-LAST:event_submitSewaActionPerformed
 
