@@ -4,10 +4,14 @@
  */
 package akrent;
 
+import java.awt.Color;
+import java.awt.Image;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 
 /**
  *
@@ -21,8 +25,19 @@ public class RentalHal2 extends javax.swing.JFrame {
     public RentalHal2() {
         initComponents();
         loadPenyewa();
+        scaleImage();
         loadMobil();
         loadHarga();
+        loadJaminan();
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+        
+    private void scaleImage(){
+        ImageIcon icon = new ImageIcon((getClass().getResource("/car.png")));
+        Image img = icon.getImage();
+        Image imgScale = img.getScaledInstance(icon_car.getWidth(), icon_car.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(imgScale);
+        icon_car.setIcon(scaledIcon);
     }
     public void loadHarga() {
         try {
@@ -48,10 +63,10 @@ public class RentalHal2 extends javax.swing.JFrame {
                 String harga = r.getString("harga");
 
                 // Set the harga to the text field
-                jTextField1.setText(harga);
+                getHarga.setText(harga);
             } else {
                 // If no result, clear the text field
-                jTextField1.setText("");
+                getHarga.setText("");
             }
 
             // Close resources
@@ -73,6 +88,22 @@ public class RentalHal2 extends javax.swing.JFrame {
             while (r.next()) {
                 String jenis_mobil = r.getString("jenis_mobil");
                 comboBoxMobil.addItem(jenis_mobil);
+            }
+            r.close();
+            s.close();
+        }catch (Exception e) {
+        }
+    }
+    public void loadJaminan() {
+        try {
+            Connection c = KoneksiDatabase.getKoneksi();
+            Statement s = c.createStatement();
+
+            String sql = "SELECT jenis_jaminan FROM jaminan;";
+            ResultSet r = s.executeQuery(sql);
+            while (r.next()) {
+                String jenis_jaminan = r.getString("jenis_jaminan");
+                comboBoxJaminan.addItem(jenis_jaminan );
             }
             r.close();
             s.close();
@@ -106,7 +137,7 @@ public class RentalHal2 extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        icon_car = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -114,13 +145,26 @@ public class RentalHal2 extends javax.swing.JFrame {
         comboBoxNama = new javax.swing.JComboBox<>();
         comboBoxMobil = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        getHarga = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        inputTgl = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        inputKembali = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        inputLama = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        comboBoxJaminan = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        comboBoxJaminan1 = new javax.swing.JComboBox<>();
+        jLabel10 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        inputAmbil = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 0));
 
-        jButton1.setBackground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Beranda");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -128,8 +172,8 @@ public class RentalHal2 extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("car");
+        icon_car.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        icon_car.setText("car");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -137,7 +181,7 @@ public class RentalHal2 extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(icon_car, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(616, Short.MAX_VALUE))
@@ -146,7 +190,7 @@ public class RentalHal2 extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(4, 4, 4)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(icon_car, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
@@ -155,17 +199,14 @@ public class RentalHal2 extends javax.swing.JFrame {
         );
 
         jLabel2.setFont(new java.awt.Font("Dubai Medium", 1, 36)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Masukkan Data Rental");
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 0));
 
         jLabel3.setFont(new java.awt.Font("Dubai Medium", 1, 24)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Data Rental");
 
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Penyewa");
 
         comboBoxNama.addItemListener(new java.awt.event.ItemListener() {
@@ -185,15 +226,122 @@ public class RentalHal2 extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Mobil");
 
-        jTextField1.setText("jTextField1");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        getHarga.setText("jTextField1");
+        getHarga.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                getHargaActionPerformed(evt);
             }
         });
+
+        jLabel6.setText("Harga");
+
+        inputTgl.setForeground(new java.awt.Color(102, 102, 102));
+        inputTgl.setText("Masukkan Tanggal Kontrak");
+        inputTgl.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                inputTglFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                inputTglFocusLost(evt);
+            }
+        });
+        inputTgl.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputTglActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Tanggal Kontrak");
+
+        inputKembali.setForeground(new java.awt.Color(102, 102, 102));
+        inputKembali.setText("Masukkan Jam Kembali");
+        inputKembali.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                inputKembaliFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                inputKembaliFocusLost(evt);
+            }
+        });
+        inputKembali.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputKembaliActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setText("Jam Kembali");
+
+        inputLama.setForeground(new java.awt.Color(102, 102, 102));
+        inputLama.setText("Masukkan Lama Penyewaan");
+        inputLama.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                inputLamaFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                inputLamaFocusLost(evt);
+            }
+        });
+        inputLama.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputLamaActionPerformed(evt);
+            }
+        });
+
+        jLabel9.setText("Lama Penyewaan");
+
+        comboBoxJaminan.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboBoxJaminanItemStateChanged(evt);
+            }
+        });
+        comboBoxJaminan.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                comboBoxJaminanPropertyChange(evt);
+            }
+        });
+
+        jLabel1.setText("Jaminan");
+
+        comboBoxJaminan1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dalam Kota", "Luar Kota" }));
+        comboBoxJaminan1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboBoxJaminan1ItemStateChanged(evt);
+            }
+        });
+        comboBoxJaminan1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                comboBoxJaminan1PropertyChange(evt);
+            }
+        });
+
+        jLabel10.setText("Paket");
+
+        jButton2.setText("Next");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        inputAmbil.setForeground(new java.awt.Color(102, 102, 102));
+        inputAmbil.setText("Masukkan Jam Ambil");
+        inputAmbil.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                inputAmbilFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                inputAmbilFocusLost(evt);
+            }
+        });
+        inputAmbil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputAmbilActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setText("Jam Ambil");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -204,15 +352,30 @@ public class RentalHal2 extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel5))
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel11))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(comboBoxMobil, 0, 370, Short.MAX_VALUE)
                             .addComponent(comboBoxNama, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextField1))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(getHarga)
+                            .addComponent(inputTgl)
+                            .addComponent(inputKembali)
+                            .addComponent(inputLama)
+                            .addComponent(comboBoxJaminan, javax.swing.GroupLayout.Alignment.TRAILING, 0, 370, Short.MAX_VALUE)
+                            .addComponent(comboBoxJaminan1, javax.swing.GroupLayout.Alignment.TRAILING, 0, 370, Short.MAX_VALUE)
+                            .addComponent(inputAmbil))
+                        .addGap(32, 32, 32)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(209, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,8 +391,35 @@ public class RentalHal2 extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(comboBoxMobil, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(225, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(getHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(inputTgl, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(inputAmbil, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(inputKembali, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(inputLama, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(comboBoxJaminan, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(comboBoxJaminan1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(7, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -268,13 +458,113 @@ public class RentalHal2 extends javax.swing.JFrame {
         loadHarga();
     }//GEN-LAST:event_comboBoxMobilItemStateChanged
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void getHargaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getHargaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_getHargaActionPerformed
 
     private void comboBoxMobilPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_comboBoxMobilPropertyChange
         // TODO add your handling code here:
     }//GEN-LAST:event_comboBoxMobilPropertyChange
+
+    private void inputTglActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputTglActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputTglActionPerformed
+
+    private void inputKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputKembaliActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputKembaliActionPerformed
+
+    private void inputLamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputLamaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputLamaActionPerformed
+
+    private void comboBoxJaminanItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboBoxJaminanItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxJaminanItemStateChanged
+
+    private void comboBoxJaminanPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_comboBoxJaminanPropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxJaminanPropertyChange
+
+    private void comboBoxJaminan1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboBoxJaminan1ItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxJaminan1ItemStateChanged
+
+    private void comboBoxJaminan1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_comboBoxJaminan1PropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxJaminan1PropertyChange
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void inputAmbilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputAmbilActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputAmbilActionPerformed
+
+    private void inputTglFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputTglFocusGained
+        // TODO add your handling code here:
+        if (inputTgl.getText().equals("Masukkan Tanggal Kontrak")) {
+            inputTgl.setText("");
+            inputTgl.setForeground(new Color(0,0,0));
+        }
+    }//GEN-LAST:event_inputTglFocusGained
+
+    private void inputTglFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputTglFocusLost
+        // TODO add your handling code here:
+        if (inputTgl.getText().equals("")) {
+            inputTgl.setText("Masukkan Tanggal Kontrak");
+            inputTgl.setForeground(new Color(102,102,102));
+        }
+    }//GEN-LAST:event_inputTglFocusLost
+
+    private void inputAmbilFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputAmbilFocusGained
+        // TODO add your handling code here:
+        if (inputAmbil.getText().equals("Masukkan Jam Ambil")) {
+            inputAmbil.setText("");
+            inputAmbil.setForeground(new Color(0,0,0));
+        }
+    }//GEN-LAST:event_inputAmbilFocusGained
+
+    private void inputAmbilFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputAmbilFocusLost
+        // TODO add your handling code here:
+        if (inputAmbil.getText().equals("")) {
+            inputAmbil.setText("Masukkan Jam Ambil");
+            inputAmbil.setForeground(new Color(102,102,102));
+        }
+    }//GEN-LAST:event_inputAmbilFocusLost
+
+    private void inputKembaliFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputKembaliFocusGained
+        // TODO add your handling code here:
+        if (inputKembali.getText().equals("Masukkan Jam Kembali")) {
+            inputKembali.setText("");
+            inputKembali.setForeground(new Color(0,0,0));
+        }
+    }//GEN-LAST:event_inputKembaliFocusGained
+
+    private void inputKembaliFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputKembaliFocusLost
+        // TODO add your handling code here:
+        if (inputKembali.getText().equals("")) {
+            inputKembali.setText("Masukkan Jam Kembali");
+            inputKembali.setForeground(new Color(102,102,102));
+        }
+    }//GEN-LAST:event_inputKembaliFocusLost
+
+    private void inputLamaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputLamaFocusGained
+        // TODO add your handling code here:
+        if (inputLama.getText().equals("Masukkan Lama Penyewaan")) {
+            inputLama.setText("");
+            inputLama.setForeground(new Color(0,0,0));
+        }
+    }//GEN-LAST:event_inputLamaFocusGained
+
+    private void inputLamaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputLamaFocusLost
+        // TODO add your handling code here:
+        if (inputLama.getText().equals("")) {
+            inputLama.setText("Masukkan Lama Penyewaan");
+            inputLama.setForeground(new Color(102,102,102));
+        }
+    }//GEN-LAST:event_inputLamaFocusLost
 
     /**
      * @param args the command line arguments
@@ -312,16 +602,30 @@ public class RentalHal2 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> comboBoxJaminan;
+    private javax.swing.JComboBox<String> comboBoxJaminan1;
     private javax.swing.JComboBox<String> comboBoxMobil;
     private javax.swing.JComboBox<String> comboBoxNama;
+    private javax.swing.JTextField getHarga;
+    private javax.swing.JLabel icon_car;
+    private javax.swing.JTextField inputAmbil;
+    private javax.swing.JTextField inputKembali;
+    private javax.swing.JTextField inputLama;
+    private javax.swing.JTextField inputTgl;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
