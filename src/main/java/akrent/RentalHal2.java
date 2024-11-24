@@ -217,6 +217,7 @@ public class RentalHal2 extends javax.swing.JFrame {
         submitButton = new javax.swing.JButton();
         inputAmbil = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -241,7 +242,7 @@ public class RentalHal2 extends javax.swing.JFrame {
                 .addComponent(icon_car, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(616, Short.MAX_VALUE))
+                .addContainerGap(712, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -448,8 +449,10 @@ public class RentalHal2 extends javax.swing.JFrame {
                             .addComponent(inputPaket, javax.swing.GroupLayout.Alignment.TRAILING, 0, 370, Short.MAX_VALUE)
                             .addComponent(inputAmbil))
                         .addGap(32, 32, 32)
-                        .addComponent(submitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(209, Short.MAX_VALUE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(submitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -487,7 +490,8 @@ public class RentalHal2 extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(comboBoxJaminan, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(inputPaket, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -571,6 +575,17 @@ public class RentalHal2 extends javax.swing.JFrame {
 
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
         // TODO add your handling code here:
+        if (inputTgl.getText().equals("Masukkan Tanggal Kontrak") || inputAmbil.getText().equals("Masukkan Jam Ambil") || inputKembali.getText().equals("Masukkan Jam Kembali") || inputLama.getText().equals("Masukkan Lama Penyewaan")) {
+            jLabel12.setForeground(Color.red);
+            jLabel12.setText("Error, Pastikan anda memasukkan Semua data");
+            
+            javax.swing.Timer timer = new javax.swing.Timer(5000, e -> {
+                jLabel12.setText(""); // Clear the error message
+            });
+            timer.setRepeats(false); // Ensure the timer runs only once
+            timer.start();
+            return;
+        } 
         String penyewa = comboBoxNama.getSelectedItem().toString();
         String mobil = comboBoxMobil.getSelectedItem().toString();
         String harga = getHarga.getText();
@@ -593,7 +608,7 @@ public class RentalHal2 extends javax.swing.JFrame {
 
             // Convert LocalTime to java.sql.Time
             Time ambil = Time.valueOf(ambilTime);
-            
+
             LocalTime kembaliTime = LocalTime.parse(jam_kembali, formatter);
 
             // Convert LocalTime to java.sql.Time
@@ -619,7 +634,7 @@ public class RentalHal2 extends javax.swing.JFrame {
         } finally {
             jLabel9.setForeground(Color.green);
             jLabel9.setText("Succes, Telah memasukkan data");
-            
+
             javax.swing.Timer timer = new javax.swing.Timer(5000, e -> {
                 jLabel9.setText(""); // Clear the error message
             });
@@ -628,6 +643,7 @@ public class RentalHal2 extends javax.swing.JFrame {
             new Riwayat().setVisible(true);
             this.dispose();  
         }
+        
     }//GEN-LAST:event_submitButtonActionPerformed
 
     private void inputAmbilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputAmbilActionPerformed
@@ -762,6 +778,7 @@ public class RentalHal2 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
