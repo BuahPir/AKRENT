@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4a687b27-f7ee-4db0-9062-f6dba78e20f1">
+	<property name="ireport.zoom" value="1.3310000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="dataset1" uuid="0aacafd4-7afb-4601-ab43-9c7a908dd18b"/>
+	<parameter name="id_rental" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT 
+            rental.jenis_mobil AS mobil,
+            mobil.no_polisi AS no_polisi,
+            mobil.tahun AS tahun,
+            mobil.warna AS warna,
+            rental.penyewa AS penyewa,
+            penyewa.nik AS nik,
+            penyewa.no_hp AS no_hp,
+            penyewa.alamat AS alamat,
+            rental.jenis_jaminan AS jaminan,
+            rental.jam_ambil AS jam_ambil,
+            rental.jam_kembali AS jam_kembali,
+            rental.jenis_paket AS paket,
+            rental.lama_sewa AS lama_sewa,
+            rental.tgl_kontrak AS tgl_kontrak,
+            rental.harga AS harga
+        FROM 
+            rental 
+        INNER JOIN 
+            penyewa ON rental.penyewa = penyewa.nama
+        INNER JOIN 
+            mobil ON rental.jenis_mobil = mobil.jenis_mobil
+        WHERE 
+            id_rental = $P{id_rental}]]>
+	</queryString>
+	<field name="mobil" class="java.lang.String"/>
+	<field name="no_polisi" class="java.lang.String"/>
+	<field name="tahun" class="java.lang.Integer"/>
+	<field name="warna" class="java.lang.String"/>
+	<field name="penyewa" class="java.lang.String"/>
+	<field name="nik" class="java.lang.String"/>
+	<field name="no_hp" class="java.lang.String"/>
+	<field name="alamat" class="java.lang.String"/>
+	<field name="jaminan" class="java.lang.String"/>
+	<field name="jam_ambil" class="java.sql.Time"/>
+	<field name="jam_kembali" class="java.sql.Time"/>
+	<field name="paket" class="java.lang.String"/>
+	<field name="lama_sewa" class="java.lang.Integer"/>
+	<field name="tgl_kontrak" class="java.lang.String"/>
+	<field name="harga" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="32" uuid="55c54377-57b0-404e-9e43-b952e6549b51"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[SURAT PERJANJIAN RENTAL / SEWA MOBIL]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="656" splitType="Stretch">
+			<textField>
+				<reportElement x="78" y="136" width="436" height="20" uuid="e0138187-83a6-4cb6-9659-c53630d8b334"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nik}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="78" y="116" width="436" height="20" uuid="4305bbb6-f288-4f2d-b052-c13b3993370e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{penyewa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="78" y="176" width="436" height="20" uuid="d6080cca-25f2-4031-aa1e-a808bef23975"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{no_hp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="78" y="156" width="436" height="20" uuid="db963504-74c0-4b43-b0c0-9122f3b86a36"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{alamat}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="127" y="352" width="100" height="20" uuid="34fabdba-d5c7-4a2d-b67f-100e6958f831"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tgl_kontrak}]]></textFieldExpression>
+			</textField>
+			<textField pattern="h.mm a">
+				<reportElement x="127" y="372" width="100" height="20" uuid="cdfc1b1c-4d8e-432a-8d56-4a5629c70142"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jam_ambil}]]></textFieldExpression>
+			</textField>
+			<textField pattern="h.mm a">
+				<reportElement x="127" y="392" width="100" height="20" uuid="d11596dc-f644-4448-adeb-76adc4e9451f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jam_kembali}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="127" y="412" width="100" height="20" uuid="129864e1-9f76-4a1a-bb1e-b2770d97c183"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lama_sewa}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="127" y="432" width="100" height="20" uuid="dfde50c3-9ca1-4fe2-9119-6a8909a9e48a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{harga}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="127" y="312" width="100" height="20" uuid="56aab339-466d-4463-92c6-2c87adcf53e3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{warna}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="127" y="292" width="100" height="20" uuid="9bee7714-71a3-4845-91d1-f6ea66d783d8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tahun}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="127" y="272" width="100" height="20" uuid="680ac160-c366-48fc-a5d6-4dd4bf20d4bd"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{no_polisi}]]></textFieldExpression>
+			</textField>
+			<elementGroup>
+				<textField>
+					<reportElement x="127" y="252" width="100" height="20" uuid="6f9055c8-da8d-4c9f-b6ad-b806cb691a5d"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{mobil}]]></textFieldExpression>
+				</textField>
+			</elementGroup>
+			<staticText>
+				<reportElement x="0" y="0" width="514" height="16" uuid="c77d3dbd-cad6-46bb-9d20-09707362f556"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Yang bertanda tangan di bawah ini adalah pihak-pihak yang telah menyepakati perjanjian:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="33" y="16" width="481" height="20" uuid="b21bc804-b723-41d3-aeb2-e1d75c63feb2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Nama	: Muhammad Akbar Oki Natsir Datu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="33" y="36" width="481" height="20" uuid="06c11775-ea51-47a1-bed5-e46b23f18ab2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[NIK	: 7371071410960002]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="33" y="56" width="481" height="20" uuid="54375277-8c7a-486c-a213-7ff79e947e6f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Alamat	: Perumahan Sapiria Garden Block C no 4]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="33" y="76" width="481" height="20" uuid="9a34dcbf-545c-4cf8-b75f-391851e722a1"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[No Telp	: 085396030467]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="33" y="96" width="494" height="20" uuid="7132654e-8a89-49e4-933f-b6581e478f80"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Selaku pemilik (Owner) AKRent Car, yang dalam perjanjian ini akan disebut sebagai PIHAK PERTAMA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="33" y="116" width="45" height="20" uuid="073b073b-a6d7-4ccf-9e4f-33c694fb5672"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Nama	:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="33" y="136" width="45" height="20" uuid="d5ba6972-983c-41a4-9cb2-a60485f72728"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[NIK	:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="33" y="156" width="45" height="20" uuid="2ac42ff9-c28f-4f2b-aad1-56793e234fc3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Alamat	:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="33" y="176" width="45" height="20" uuid="75993dd5-05f3-4294-a271-4016b9a0f935"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[No Telp	:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="33" y="196" width="494" height="20" uuid="5b3dd117-6d8b-4345-893a-4dd07f81ae48"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Selaku Penyewa selanjutnya disebut sebagai Pihak kedua]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="232" width="572" height="20" uuid="1c21af36-398e-44ba-8955-d330ece258e1"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Dengan ini Pihak kedua menyatakan telah menyewa 1 (satu) unit kendaraan milik Pihak pertama dengan identitas kendaraan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="252" width="127" height="20" uuid="ba8d6f36-8503-4fa8-9bf9-deb6e01a519a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Jenis Kendaraan		:	]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="272" width="127" height="20" uuid="b3aeca44-d4f5-42a3-ab1b-cd64223a0fa4"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[No Polisi			:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="292" width="127" height="20" uuid="3e004e31-8227-4760-bc39-92edfd40c46a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Tahun			:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="312" width="127" height="20" uuid="7e670521-2bcb-4cfb-81dd-75827b54e695"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Warna			:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="127" y="452" width="100" height="20" uuid="7739d104-c113-41ce-86a1-99613d509bb0"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jaminan}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="332" width="555" height="20" uuid="b7f80147-0198-4a62-abfd-cdb2bd15e5b2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dengan Perjanjian kontrak sebagai berikut:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="352" width="127" height="20" uuid="4b090b28-cdd2-4bbf-b635-3df4fa2e2e87"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Tanggal Kontrak		:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="372" width="127" height="20" uuid="47cf5c3e-fd13-4938-9259-3d68d50b4e90"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Jam Pengambilan		:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="392" width="127" height="20" uuid="06072dd0-b50e-447c-bba8-c51a81a11614"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Jam Pengembalian		:	]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="432" width="127" height="20" uuid="b369e21e-3f58-42f0-a805-0cfb7152c374"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Harga Kontrak		:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="412" width="127" height="20" uuid="2db36b23-fa48-4dc9-8f52-5a6da3478c40"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Lama Sewa		:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="452" width="127" height="20" uuid="a9ab1607-48ea-4062-9a24-ed7b3e89a421"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Barang Jaminan/Titipan	:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="17" y="522" width="194" height="20" uuid="442dcaeb-077d-451f-9aed-559d07a42387"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[PIHAK KEDUA (PENYEWA KENDARAAN)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="17" y="615" width="194" height="20" uuid="bb940936-07e3-44df-9b18-5bb893a2a0a1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[....................................................................]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="359" y="502" width="194" height="20" uuid="e872924a-fe2b-4c95-9625-d7e39c4779ca"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Makassar,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="359" y="522" width="194" height="20" uuid="e97c5e9c-cff9-4e1d-8fa5-d0970cb3dac1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[PIHAK PERTAMA (PEMILIK)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="359" y="615" width="194" height="20" uuid="582133d2-8332-4e05-9d8b-54a9e0384dc7"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Muhammad Akbar Oki Natsir Datu]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

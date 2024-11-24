@@ -6,19 +6,38 @@ package akrent;
 
 import java.awt.Color;
 import java.awt.Image;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
+import java.sql.ResultSet; 
+import java.sql.SQLException; 
+import java.sql.Statement; 
+import java.sql.PreparedStatement; 
+import java.sql.Connection; 
 /**
  *
  * @author BuahPir
  */
 public class RentalHal2 extends javax.swing.JFrame {
-
+    JasperReport jasperReport;
+    JasperDesign jasperDesign;
+    JasperPrint jasperPrint;
+    Map<String, Object> param = new HashMap<String, Object>();
     /**
      * Creates new form RentalHal2
      */
@@ -29,6 +48,7 @@ public class RentalHal2 extends javax.swing.JFrame {
         loadMobil();
         loadHarga();
         loadJaminan();
+        getHarga.setEditable(false);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
         
@@ -39,6 +59,7 @@ public class RentalHal2 extends javax.swing.JFrame {
         ImageIcon scaledIcon = new ImageIcon(imgScale);
         icon_car.setIcon(scaledIcon);
     }
+    
     public void loadHarga() {
         try {
             // Get database connection
@@ -61,9 +82,43 @@ public class RentalHal2 extends javax.swing.JFrame {
             if (r.next()) {
                 // Get the 'harga' value
                 String harga = r.getString("harga");
-
-                // Set the harga to the text field
+                
                 getHarga.setText(harga);
+                // Parse inputLama to integer
+                int lama = Integer.parseInt(inputLama.getText());
+                int hargaInt = Integer.parseInt(harga);
+                
+                // Handle "Dalam Kota"
+                if (inputPaket.getSelectedItem().equals("Dalam Kota")) {
+                    if (lama >= 10) {
+                        int total = hargaInt * lama;
+                        int discount = (int) (total * 0.8); // Apply 20% discount
+                        getHarga.setText(String.valueOf(discount));
+                    } else if (lama > 1) {
+                        int total = hargaInt * lama;
+                        getHarga.setText(String.valueOf(total));
+                    } else {
+                        getHarga.setText(harga);
+                        
+                    }
+                }
+                else if (inputPaket.getSelectedItem().equals("Luar Kota")) {
+                    int total = hargaInt + 50000; // Add 50,000 for "Luar Kota"
+                    if (lama >= 10) {
+                        int totalHarga = total * lama;
+                        int discountedHarga = (int) (totalHarga * 0.7); // Apply 30% discount
+                        getHarga.setText(String.valueOf(discountedHarga));
+                    } else if (lama > 1) {
+                        int totalKT = total * lama;
+                        getHarga.setText(String.valueOf(totalKT));
+                    } else {
+                        getHarga.setText(String.valueOf(total));
+                        
+                    }
+                } else {
+                    getHarga.setText(harga);
+                }
+
             } else {
                 // If no result, clear the text field
                 getHarga.setText("");
@@ -77,6 +132,7 @@ public class RentalHal2 extends javax.swing.JFrame {
             System.err.println("Error loading harga: " + e.getMessage());
         }
     }
+
 
     public void loadMobil() {
         try {
@@ -99,11 +155,12 @@ public class RentalHal2 extends javax.swing.JFrame {
             Connection c = KoneksiDatabase.getKoneksi();
             Statement s = c.createStatement();
 
-            String sql = "SELECT jenis_jaminan FROM jaminan;";
+            String sql = "SELECT jenis_jaminan, unit FROM jaminan;";
             ResultSet r = s.executeQuery(sql);
             while (r.next()) {
                 String jenis_jaminan = r.getString("jenis_jaminan");
-                comboBoxJaminan.addItem(jenis_jaminan );
+                String unit = r.getString("unit");
+                comboBoxJaminan.addItem(jenis_jaminan +" "+ unit );
             }
             r.close();
             s.close();
@@ -155,9 +212,9 @@ public class RentalHal2 extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         comboBoxJaminan = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        comboBoxJaminan1 = new javax.swing.JComboBox<>();
+        inputPaket = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        submitButton = new javax.swing.JButton();
         inputAmbil = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
 
@@ -234,6 +291,11 @@ public class RentalHal2 extends javax.swing.JFrame {
                 getHargaActionPerformed(evt);
             }
         });
+        getHarga.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                getHargaKeyTyped(evt);
+            }
+        });
 
         jLabel6.setText("Harga");
 
@@ -283,9 +345,21 @@ public class RentalHal2 extends javax.swing.JFrame {
                 inputLamaFocusLost(evt);
             }
         });
+        inputLama.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                inputLamaInputMethodTextChanged(evt);
+            }
+        });
         inputLama.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inputLamaActionPerformed(evt);
+            }
+        });
+        inputLama.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                inputLamaKeyTyped(evt);
             }
         });
 
@@ -304,24 +378,24 @@ public class RentalHal2 extends javax.swing.JFrame {
 
         jLabel1.setText("Jaminan");
 
-        comboBoxJaminan1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dalam Kota", "Luar Kota" }));
-        comboBoxJaminan1.addItemListener(new java.awt.event.ItemListener() {
+        inputPaket.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dalam Kota", "Luar Kota" }));
+        inputPaket.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                comboBoxJaminan1ItemStateChanged(evt);
+                inputPaketItemStateChanged(evt);
             }
         });
-        comboBoxJaminan1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+        inputPaket.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                comboBoxJaminan1PropertyChange(evt);
+                inputPaketPropertyChange(evt);
             }
         });
 
         jLabel10.setText("Paket");
 
-        jButton2.setText("Next");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        submitButton.setText("Next");
+        submitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                submitButtonActionPerformed(evt);
             }
         });
 
@@ -371,10 +445,10 @@ public class RentalHal2 extends javax.swing.JFrame {
                             .addComponent(inputKembali)
                             .addComponent(inputLama)
                             .addComponent(comboBoxJaminan, javax.swing.GroupLayout.Alignment.TRAILING, 0, 370, Short.MAX_VALUE)
-                            .addComponent(comboBoxJaminan1, javax.swing.GroupLayout.Alignment.TRAILING, 0, 370, Short.MAX_VALUE)
+                            .addComponent(inputPaket, javax.swing.GroupLayout.Alignment.TRAILING, 0, 370, Short.MAX_VALUE)
                             .addComponent(inputAmbil))
                         .addGap(32, 32, 32)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(submitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(209, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -416,9 +490,9 @@ public class RentalHal2 extends javax.swing.JFrame {
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(comboBoxJaminan1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(inputPaket, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(submitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(7, Short.MAX_VALUE))
         );
 
@@ -486,17 +560,75 @@ public class RentalHal2 extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_comboBoxJaminanPropertyChange
 
-    private void comboBoxJaminan1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboBoxJaminan1ItemStateChanged
+    private void inputPaketItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_inputPaketItemStateChanged
         // TODO add your handling code here:
-    }//GEN-LAST:event_comboBoxJaminan1ItemStateChanged
+        loadHarga();
+    }//GEN-LAST:event_inputPaketItemStateChanged
 
-    private void comboBoxJaminan1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_comboBoxJaminan1PropertyChange
+    private void inputPaketPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_inputPaketPropertyChange
         // TODO add your handling code here:
-    }//GEN-LAST:event_comboBoxJaminan1PropertyChange
+    }//GEN-LAST:event_inputPaketPropertyChange
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+        String penyewa = comboBoxNama.getSelectedItem().toString();
+        String mobil = comboBoxMobil.getSelectedItem().toString();
+        String harga = getHarga.getText();
+        String tgl_kontrak = inputTgl.getText();
+        String jam_ambil = inputAmbil.getText();
+        String jam_kembali = inputKembali.getText();
+        String lama = inputLama.getText();
+        String jaminan = comboBoxJaminan.getSelectedItem().toString();
+        String paket = inputPaket.getSelectedItem().toString();
+        try {
+            int harga1 = Integer.parseInt(harga);
+        // Convert the string to java.util.Date
+            SimpleDateFormat dateFormat = new SimpleDateFormat(tgl_kontrak);
+            Date today = Calendar.getInstance().getTime();
+            String tgl = dateFormat.format(today);
+
+            // Parse the string into a LocalTime object
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime ambilTime = LocalTime.parse(jam_ambil, formatter);
+
+            // Convert LocalTime to java.sql.Time
+            Time ambil = Time.valueOf(ambilTime);
+            
+            LocalTime kembaliTime = LocalTime.parse(jam_kembali, formatter);
+
+            // Convert LocalTime to java.sql.Time
+            Time kembali = Time.valueOf(kembaliTime);
+
+        // Convert java.util.Date to java.sql.Date
+            Connection c = KoneksiDatabase.getKoneksi();
+            String sql = "INSERT INTO rental (penyewa, jenis_mobil, harga, tgl_kontrak, jam_ambil, jam_kembali, jenis_jaminan, jenis_paket, lama_sewa) VALUES (? ,?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement p = c.prepareStatement(sql);
+            p.setString(1, penyewa);   
+            p.setString(2, mobil);
+            p.setInt(3, harga1);
+            p.setString(4, tgl); 
+            p.setTime(5, ambil); 
+            p.setTime(6, kembali); 
+            p.setString(7, jaminan);
+            p.setString(8, paket);
+            p.setString(9, lama);
+            p.executeUpdate();
+            p.close();
+        } catch (SQLException e) {
+            System.out.println("Terjadi Error: " + e.getMessage());
+        } finally {
+            jLabel9.setForeground(Color.green);
+            jLabel9.setText("Succes, Telah memasukkan data");
+            
+            javax.swing.Timer timer = new javax.swing.Timer(5000, e -> {
+                jLabel9.setText(""); // Clear the error message
+            });
+            timer.setRepeats(false); // Ensure the timer runs only once
+            timer.start();
+            new Riwayat().setVisible(true);
+            this.dispose();  
+        }
+    }//GEN-LAST:event_submitButtonActionPerformed
 
     private void inputAmbilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputAmbilActionPerformed
         // TODO add your handling code here:
@@ -552,6 +684,7 @@ public class RentalHal2 extends javax.swing.JFrame {
 
     private void inputLamaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputLamaFocusGained
         // TODO add your handling code here:
+        loadHarga();
         if (inputLama.getText().equals("Masukkan Lama Penyewaan")) {
             inputLama.setText("");
             inputLama.setForeground(new Color(0,0,0));
@@ -565,6 +698,19 @@ public class RentalHal2 extends javax.swing.JFrame {
             inputLama.setForeground(new Color(102,102,102));
         }
     }//GEN-LAST:event_inputLamaFocusLost
+
+    private void getHargaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_getHargaKeyTyped
+        // TODO add your handling code here:
+        loadHarga();
+    }//GEN-LAST:event_getHargaKeyTyped
+
+    private void inputLamaInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_inputLamaInputMethodTextChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputLamaInputMethodTextChanged
+
+    private void inputLamaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputLamaKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputLamaKeyTyped
 
     /**
      * @param args the command line arguments
@@ -603,7 +749,6 @@ public class RentalHal2 extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> comboBoxJaminan;
-    private javax.swing.JComboBox<String> comboBoxJaminan1;
     private javax.swing.JComboBox<String> comboBoxMobil;
     private javax.swing.JComboBox<String> comboBoxNama;
     private javax.swing.JTextField getHarga;
@@ -611,9 +756,9 @@ public class RentalHal2 extends javax.swing.JFrame {
     private javax.swing.JTextField inputAmbil;
     private javax.swing.JTextField inputKembali;
     private javax.swing.JTextField inputLama;
+    private javax.swing.JComboBox<String> inputPaket;
     private javax.swing.JTextField inputTgl;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -627,5 +772,6 @@ public class RentalHal2 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton submitButton;
     // End of variables declaration//GEN-END:variables
 }

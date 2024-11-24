@@ -136,11 +136,11 @@
                               <Component id="inputKembali" max="32767" attributes="0"/>
                               <Component id="inputLama" max="32767" attributes="0"/>
                               <Component id="comboBoxJaminan" alignment="1" pref="370" max="32767" attributes="0"/>
-                              <Component id="comboBoxJaminan1" alignment="1" pref="370" max="32767" attributes="0"/>
+                              <Component id="inputPaket" alignment="1" pref="370" max="32767" attributes="0"/>
                               <Component id="inputAmbil" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                          <Component id="jButton2" min="-2" pref="98" max="-2" attributes="0"/>
+                          <Component id="submitButton" min="-2" pref="98" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace pref="209" max="32767" attributes="0"/>
@@ -194,9 +194,9 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="comboBoxJaminan1" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
+                      <Component id="inputPaket" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
                       <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButton2" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
+                      <Component id="submitButton" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="7" max="32767" attributes="0"/>
               </Group>
@@ -255,6 +255,7 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="getHargaActionPerformed"/>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="getHargaKeyTyped"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
@@ -308,7 +309,9 @@
           <Events>
             <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="inputLamaFocusGained"/>
             <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="inputLamaFocusLost"/>
+            <EventHandler event="inputMethodTextChanged" listener="java.awt.event.InputMethodListener" parameters="java.awt.event.InputMethodEvent" handler="inputLamaInputMethodTextChanged"/>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inputLamaActionPerformed"/>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="inputLamaKeyTyped"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel9">
@@ -335,7 +338,7 @@
             <Property name="text" type="java.lang.String" value="Jaminan"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="comboBoxJaminan1">
+        <Component class="javax.swing.JComboBox" name="inputPaket">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="2">
@@ -345,8 +348,8 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="comboBoxJaminan1ItemStateChanged"/>
-            <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="comboBoxJaminan1PropertyChange"/>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="inputPaketItemStateChanged"/>
+            <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="inputPaketPropertyChange"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -357,12 +360,12 @@
             <Property name="text" type="java.lang.String" value="Paket"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton2">
+        <Component class="javax.swing.JButton" name="submitButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Next"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="submitButtonActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="inputAmbil">
