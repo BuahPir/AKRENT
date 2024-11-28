@@ -640,7 +640,7 @@ public class RentalHal2 extends javax.swing.JFrame {
             });
             timer.setRepeats(false); // Ensure the timer runs only once
             timer.start();
-            new Riwayat().setVisible(true);
+            new Dashboard().setVisible(true);
             this.dispose();  
         }
         

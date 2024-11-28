@@ -37,7 +37,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <exec.mainClass>akrent.admin</exec.mainClass>
+        <exec.mainClass>akrent.Dashboard</exec.mainClass>
     </properties>
     <build>
         <resources>
@@ -45,5 +45,20 @@
                 <directory>src/main/resources</directory>
             </resource>
         </resources>
+        <plugins>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <configuration>
+              <archive>
+                <manifest>
+                  <mainClass>akrent.Dashboard</mainClass>
+                </manifest>
+              </archive>
+              <descriptorRefs>
+                <descriptorRef>jar-with-dependencies</descriptorRef>
+              </descriptorRefs>
+            </configuration>
+          </plugin>
+        </plugins>
     </build>
 </project>
