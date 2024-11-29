@@ -12,21 +12,30 @@
     </resources>
     <plugins>
       <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>akrent.Dashboard</mainClass>
+            </manifest>
+          </archive>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+        </configuration>
+      </plugin>
+      <plugin>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.6.0</version>
         <executions>
           <execution>
-            <phase>package</phase>
             <goals>
               <goal>shade</goal>
             </goals>
             <configuration>
+              <shadedArtifactAttached>true</shadedArtifactAttached>
               <transformers>
                 <transformer>
-                  <manifestEntries>
-                    <Main-Class>akrent.admin</Main-Class>
-                    <Build-Number>123</Build-Number>
-                  </manifestEntries>
+                  <mainClass>akrent.Dashboard</mainClass>
                 </transformer>
               </transformers>
             </configuration>
@@ -45,7 +54,7 @@
   </dependencies>
   <properties>
     <maven.compiler.target>21</maven.compiler.target>
-    <exec.mainClass>akrent.admin</exec.mainClass>
+    <exec.mainClass>akrent.Dashboard</exec.mainClass>
     <maven.compiler.source>21</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
